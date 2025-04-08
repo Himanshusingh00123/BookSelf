@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📘 BookShelf</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background:#FDFCF8;
+      color: #333;
+    }
+
+    header {
+        background: linear-gradient(90deg, #4A00E0, #8E2DE2);
+      color: #FFFFFF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+
+    nav a:hover {
+      color: #ffeb3b;
+    }
+
+    .section {
+      display: none;
+      padding: 2rem;
+      min-height: 80vh;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .slider {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .slider img {
+      flex-shrink: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid rgb(26, 27, 34);
+    }
+
+    .books, .papers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .book-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .book-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    }
+
+    .book-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .book-card h3 {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .book-card a, .book-card button {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      background-color: #3949ab;
+      color: white;
+      border-radius: 4px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    .book-card a:hover, .book-card button:hover {
+      background-color: #5c6bc0;
+    }
+
+    .admin-login, .admin-form {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    input, textarea, button, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.7rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    footer {
+      background-color: #3949ab;
+      color: white;
+      text-align: center;
+      padding: 3rem;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      height: 150px;
+    }
+
+    .tools {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .home-section {
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+      }
+
+      .slider img {
+        height: 325px;
+      }
+   
+    
+    }
+    @media (max-width: 450px) {
+      nav {
+        flex-direction: column;
+      }
+
+      .slider img {
+        height:170px ;
+        border: 1px solid rgb(35, 36, 43);
+      }
+      .book-card img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      font-family: Pacifico;
+    }
+    header {
+        background: linear-gradient(90deg, #6A0DAD, #8E4585);
+        color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    footer {
+    background: linear-gradient(90deg, #1D2671, #C33764);
+      color:rgb(230, 227, 227);
+      text-align: center;
+      padding: 1.5rem;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      height: 180px;
+    }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">📖 BookShelf</div>
+    <nav>
+      <a onclick="showHome()">Home</a>
+      <a onclick="showAdminPanel()">Admin Panel</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="section active">
+      <div class="slider">
+        <img src="Banner1.png" />
+        <img src="banner2.png" />
+        <img src="banner3.png" />
+        <img src="banner4.png" />
+      </div>
+
+      <div class="home-section">
+        <h2>📚 AKTU Books</h2>
+        <div class="tools">
+          <input type="text" id="searchInput" placeholder="Search books..." onkeyup="renderBooks()">
+          <select id="authorFilter" onchange="renderBooks()">
+            <option value="">All Authors</option>
+          </select>
+        </div>
+        <div id="bookList" class="books"></div>
+      </div>
+
+      <div class="home-section">
+        <h2>📝 Previous Year Papers</h2>
+        <div id="paperList" class="papers"></div>
+      </div>
+    </section>
+
+    <section id="admin" class="section">
+      <div class="admin-login">
+        <h2>Admin Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="adminLogin()">Login</button>
+      </div>
+
+      <div id="adminPanel" style="display:none">
+        <div class="admin-form">
+            <h3>Add New Book</h3>
+          
+            <input type="text" id="bookName" placeholder="Book Title">
+            <input type="text" id="author" placeholder="Author">
+            <input type="text" id="category" placeholder="Category">
+            <textarea id="description" placeholder="Description"></textarea>
+          
+            <!-- Cover Image Upload -->
+            <label>Cover Image:</label>
+            <input type="file" id="coverUpload" accept="image/*">
+          
+            <!-- PDF File Upload (Choose File) -->
+            <label>PDF File:</label>
+            <input type="file" id="pdfUpload" accept="application/pdf">
+          
+            <button onclick="addBook()">Add Book</button>
+          </div>
+          
+          
+
+        <div class="admin-form">
+          <h3>Add Previous Year Paper</h3>
+          <input type="text" id="paperName" placeholder="Paper Title">
+          <input type="text" id="paperYear" placeholder="Year">
+          <input type="text" id="paperLink" placeholder="Download Link">
+          <button onclick="addPaper()">Add Paper</button>
+        </div>
+
+        <div id="adminBookList" class="books"></div>
+        <h3 style="margin-top: 2rem;">All Papers</h3>
+       <div id="adminPaperList" class="papers"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 BookShelf Library |© 2025 Hiamsnhu | All rights reserved.  
+    This eBook is for personal use only and may not be reproduced, distributed, or sold without written permission from the author.  
+    | Email: contact@BookShelf.com
+  </footer>
+
+  <script>
+    const showHome = () => {
+      document.getElementById('home').classList.add('active');
+      document.getElementById('admin').classList.remove('active');
+      renderBooks();
+      renderPapers();
+    };
+
+    const showAdminPanel = () => {
+      document.getElementById('home').classList.remove('active');
+      document.getElementById('admin').classList.add('active');
+    };
+
+    const adminLogin = () => {
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+  if (user === 'Himanshu' && pass === 'Singh@123') {
+    document.querySelector('.admin-login').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    renderAdminBooks();
+    renderAdminPapers(); 
+    renderPapers();
+  } else {
+    alert('Incorrect User Or Password');
+  }
+};
+
+const addBook = () => {
+  const name = document.getElementById('bookName').value.trim();
+  const author = document.getElementById('author').value.trim();
+  const category = document.getElementById('category').value.trim();
+  const desc = document.getElementById('description').value.trim();
+  const coverFile = document.getElementById('coverUpload').files[0];
+  const pdfFile = document.getElementById('pdfUpload').files[0];
+
+  if (!name || !author || !desc || !coverFile || !pdfFile) {
+    alert('Please fill all fields and upload files.');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const coverURL = reader.result;
+    const pdfURL = URL.createObjectURL(pdfFile);
+
+    const book = { name, author, desc, category, image: coverURL, link: pdfURL };
+    const books = JSON.parse(localStorage.getItem('books')) || [];
+    books.push(book);
+    localStorage.setItem('books', JSON.stringify(books));
+
+    // Clear fields
+    document.getElementById('bookName').value = '';
+    document.getElementById('author').value = '';
+    document.getElementById('category').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('coverUpload').value = '';
+    document.getElementById('pdfUpload').value = '';
+
+    renderAdminBooks();
+    renderBooks();
+  };
+  reader.readAsDataURL(coverFile); // For cover image preview
+};
+
+
+    const addPaper = () => {
+      const title = document.getElementById('paperName').value.trim();
+      const year = document.getElementById('paperYear').value.trim();
+      const link = document.getElementById('paperLink').value.trim();
+
+      if (!title || !year || !link) {
+        alert('Please fill in all fields for the paper.');
+        return;
+      }
+      let selectedPDFFile = null;
+
+document.getElementById("pdfDropZone").addEventListener("click", () => {
+  document.getElementById("pdfUpload").click();
+});
+
+document.getElementById("pdfUpload").addEventListener("change", (e) => {
+  selectedPDFFile = e.target.files[0];
+});
+
+document.getElementById("pdfDropZone").addEventListener("dragover", (e) => {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "copy";
+  e.target.style.borderColor = "#3f51b5";
+});
+
+document.getElementById("pdfDropZone").addEventListener("dragleave", (e) => {
+  e.preventDefault();
+  e.target.style.borderColor = "#999";
+});
+
+document.getElementById("pdfDropZone").addEventListener("drop", (e) => {
+  e.preventDefault();
+  selectedPDFFile = e.dataTransfer.files[0];
+  e.target.style.borderColor = "#999";
+});
+
+
+      const paper = { title, year, link };
+      const papers = JSON.parse(localStorage.getItem('papers')) || [];
+      papers.push(paper);
+      localStorage.setItem('papers', JSON.stringify(papers));
+
+      document.getElementById('paperName').value = '';
+      document.getElementById('paperYear').value = '';
+      document.getElementById('paperLink').value = '';
+
+      renderPapers();
+    };
+
+    const renderBooks = () => {
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
+      const authorFilter = document.getElementById('authorFilter')?.value || '';
+
+      const list = document.getElementById('bookList');
+      const filtered = books.filter(book =>
+        book.name.toLowerCase().includes(searchQuery) &&
+        (authorFilter === '' || book.author === authorFilter)
+      );
+
+      const authorDropdown = document.getElementById('authorFilter');
+      if (authorDropdown && authorDropdown.options.length <= 1) {
+        const authors = [...new Set(books.map(b => b.author))];
+        authors.forEach(author => {
+          const opt = document.createElement('option');
+          opt.value = author;
+          opt.textContent = author;
+          authorDropdown.appendChild(opt);
+        });
+      }
+
+      list.innerHTML = filtered.length ? filtered.map(book => `
+        <div class="book-card">
+          <img src="${book.image}" />
+          <h3>${book.name}</h3>
+          <p><strong>Author:</strong> ${book.author}</p>
+          <p>${book.desc}</p>
+          <a href="${book.link}" target="_blank">Download</a>
+        </div>
+      `).join('') : '<p>📚 No books available at this time.</p>';
+    };
+
+    const renderAdminBooks = () => {
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      const list = document.getElementById('adminBookList');
+      list.innerHTML = books.map((book, i) => `
+        <div class="book-card">
+          <img src="${book.image}" />
+          <h3>${book.name}</h3>
+          <p><strong>Author:</strong> ${book.author}</p>
+          <p>${book.desc}</p>
+          <a href="${book.link}" target="_blank">Download</a>
+          <button onclick="deleteBook(${i})">Delete</button>
+        </div>
+      `).join('');
+    };
+
+    const renderPapers = () => {
+  const papers = JSON.parse(localStorage.getItem('papers')) || [];
+  const list = document.getElementById('paperList');
+  list.innerHTML = papers.map(paper => `
+    <div class="book-card">
+      <h3>${paper.title}</h3>
+      <p><strong>Year:</strong> ${paper.year}</p>
+      <a href="${paper.link}" target="_blank">Download</a>
+    </div>
+  `).join('');
+};
+const renderAdminPapers = () => {
+  const papers = JSON.parse(localStorage.getItem('papers')) || [];
+  const list = document.getElementById('adminPaperList');
+
+  list.innerHTML = papers.map((paper, index) => `
+    <div class="book-card">
+      <h3>${paper.title}</h3>
+      <p><strong>Year:</strong> ${paper.year}</p>
+      <a href="${paper.link}" target="_blank">Download</a>
+      <button onclick="deletePaper(${index})">Delete</button>
+    </div>
+  `).join('');
+};
+
+
+    const deleteBook = (index) => {
+      if (!confirm('Are you sure you want to delete this book?')) return;
+      const books = JSON.parse(localStorage.getItem('books')) || [];
+      books.splice(index, 1);
+      localStorage.setItem('books', JSON.stringify(books));
+      renderAdminBooks();
+      renderBooks();
+    };
+    const deletePaper = (index) => {
+  if (!confirm('Are you sure you want to delete this paper?')) return;
+  const papers = JSON.parse(localStorage.getItem('papers')) || [];
+  papers.splice(index, 1);
+  localStorage.setItem('papers', JSON.stringify(papers));
+  renderAdminPapers();
+  renderPapers(); // also refresh public view
+};
+
+    window.onload = showHome;
+  </script>
+</body>
+
+</html>
