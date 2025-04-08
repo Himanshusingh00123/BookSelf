@@ -376,57 +376,28 @@ const addBook = () => {
   };
   reader.readAsDataURL(coverFile); // For cover image preview
 };
+const addPaper = () => {
+  const title = document.getElementById('paperName').value.trim();
+  const year = document.getElementById('paperYear').value.trim();
+  const link = document.getElementById('paperLink').value.trim();
 
+  if (!title || !year || !link) {
+    alert('Please fill in all fields for the paper.');
+    return;
+  }
 
-    const addPaper = () => {
-      const title = document.getElementById('paperName').value.trim();
-      const year = document.getElementById('paperYear').value.trim();
-      const link = document.getElementById('paperLink').value.trim();
+  const paper = { title, year, link };
+  const papers = JSON.parse(localStorage.getItem('papers')) || [];
+  papers.push(paper);
+  localStorage.setItem('papers', JSON.stringify(papers));
 
-      if (!title || !year || !link) {
-        alert('Please fill in all fields for the paper.');
-        return;
-      }
-      let selectedPDFFile = null;
+  document.getElementById('paperName').value = '';
+  document.getElementById('paperYear').value = '';
+  document.getElementById('paperLink').value = '';
 
-document.getElementById("pdfDropZone").addEventListener("click", () => {
-  document.getElementById("pdfUpload").click();
-});
-
-document.getElementById("pdfUpload").addEventListener("change", (e) => {
-  selectedPDFFile = e.target.files[0];
-});
-
-document.getElementById("pdfDropZone").addEventListener("dragover", (e) => {
-  e.preventDefault();
-  e.dataTransfer.dropEffect = "copy";
-  e.target.style.borderColor = "#3f51b5";
-});
-
-document.getElementById("pdfDropZone").addEventListener("dragleave", (e) => {
-  e.preventDefault();
-  e.target.style.borderColor = "#999";
-});
-
-document.getElementById("pdfDropZone").addEventListener("drop", (e) => {
-  e.preventDefault();
-  selectedPDFFile = e.dataTransfer.files[0];
-  e.target.style.borderColor = "#999";
-});
-
-
-      const paper = { title, year, link };
-      const papers = JSON.parse(localStorage.getItem('papers')) || [];
-      papers.push(paper);
-      localStorage.setItem('papers', JSON.stringify(papers));
-
-      document.getElementById('paperName').value = '';
-      document.getElementById('paperYear').value = '';
-      document.getElementById('paperLink').value = '';
-
-      renderPapers();
-    };
-
+  renderPapers();
+  renderAdminPapers(); // ✅ Also refresh admin view
+};
     const renderBooks = () => {
       const books = JSON.parse(localStorage.getItem('books')) || [];
       const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
