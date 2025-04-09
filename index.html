@@ -132,7 +132,7 @@
     .admin-login, .admin-form {
       max-width: 400px;
       margin: auto;
-      background: #fff;
+      background: #ffffff;
       padding: 1rem;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -146,6 +146,10 @@
       border-radius: 4px;
       border: 1px solid #ccc;
       font-size: 1rem;
+    }
+    button:hover{
+      background-color: #3750f0;
+      color: #ccc;
     }
 
     footer {
@@ -490,6 +494,19 @@ const renderAdminPapers = () => {
 };
 
     window.onload = showHome;
+    let slider = document.querySelector('.slider');
+  let scrollAmount = 1;
+
+  const autoScrollSlider = () => {
+    if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) {
+      slider.scrollLeft = 0;
+    } else {
+      slider.scrollLeft += scrollAmount;
+    }
+  };
+
+  let sliderInterval = setInterval(autoScrollSlider, 20); // speed control
+
   </script>
 </body>
 
